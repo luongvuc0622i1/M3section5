@@ -27,9 +27,31 @@ INSERT INTO Products (productCode, productName, productPrice, productAmount, pro
 					 ('SP11', 'Quạt', 350000, 5, 'Made in ChaiLa', 'Còn HSD');
 
 -- Tạo Unique Index trên bảng Products (sử dụng cột productCode để tạo chỉ mục)
+ALTER TABLE Products ADD INDEX idx_productCode(productCode);
+EXPLAIN SELECT * FROM Products WHERE productCode = 'SP02'; 
+
 -- Tạo Composite Index trên bảng Products (sử dụng 2 cột productName và productPrice)
--- Sử dụng câu lệnh EXPLAIN để biết được câu lệnh SQL của bạn thực thi như nào
--- So sánh câu truy vấn trước và sau khi tạo index
+ALTER TABLE Products ADD INDEX idx_productName(productName, productPrice);
+EXPLAIN SELECT * FROM Products WHERE productName = 'BVS'; 
+
+-- Tạo view lấy về các thông tin: productCode, productName, productPrice, productStatus từ bảng products.
+CREATE VIEW Products_view AS
+	SELECT productCode,
+		   productName,
+		   productPrice,
+		   productStatus
+	FROM Products;
+    
+SELECT * FROM Products_view;
+
+DROP VIEW Products_view;
+
+-- Tiến hành sửa đổi view
+UPDATE	products
+SET		ProductName	=	'Giấy chùi ass'
+WHERE	ProductCode	=	'SP10';
+
+SELECT * FROM Products_view;
 
 -- Tạo store procedure lấy tất cả thông tin của tất cả các sản phẩm trong bảng product
 DELIMITER //
